@@ -1,4 +1,4 @@
-package com.zh.learn.yunti.test1_dingding;
+package com.zh.learn.yunti.test2_daima;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +13,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
-import java.io.FileReader;
+import static org.junit.Assert.*;
 
 @Slf4j
 @SpringBootTest
-public class SendDDMessageTest {
+public class GetAllCodeLineTest {
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -30,12 +30,18 @@ public class SendDDMessageTest {
     }
 
     @Test
-    public void sendDDMsg() throws Exception {
+    public void getCodeLine() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/test1/sendDDMsg")
+                .get("/test2/getCodeLine")
+                .param("prjPath","D:\\AllDaiMa\\yunti\\learn")
+                .param("fileTypeS",".txt.java.xml.json")
+                .param("greaterSome","20")
                 .contentType(MediaType.APPLICATION_JSON);
-        String res = mockMvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk()).andReturn()
-                .getResponse().getContentAsString();
+        String res = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         log.info("测试结果：{}", res);
     }
 }

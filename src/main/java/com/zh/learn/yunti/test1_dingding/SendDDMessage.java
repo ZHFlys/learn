@@ -1,5 +1,6 @@
 package com.zh.learn.yunti.test1_dingding;
 
+import com.zh.learn.yunti.common.ResultBody;
 import com.zh.learn.yunti.common.utils.EncryptUtils;
 import com.zh.learn.yunti.common.utils.SendHttps;
 import com.zh.learn.yunti.common.utils.ZHConfiguration;
@@ -18,11 +19,19 @@ import java.util.Map;
 import static com.zh.learn.yunti.common.utils.EncryptUtils.getDingDingSignature;
 
 /**
+ * 考察点：读写文件和http请求
+ * 需求：使用自己的钉钉通知群机器人给自己发提前设定好的内容。从文本中读取内容。已经发过的，重启应用也不需要再发了。发布内容为java开发规范中的条例：
+ *
+ * https://www.tapd.cn/21394591/documents/show/1121394591001002508?file_type=pdf&file_ext=pdf
+ *
+ *  示例：
+ * 1. 【强制】避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成 本，直接用类名来访问即可。
+ */
+/**
  * @author ：郑小浩
  * @description：练习一
  * @date ：2022/3/11 下午 21:24
  */
-
 @RestController
 @Slf4j
 public class SendDDMessage {
@@ -41,7 +50,7 @@ public class SendDDMessage {
     }
 
     @GetMapping(value = "/test1/sendDDMsg")
-    public String sendDDMsg() throws Exception {
+    public ResultBody sendDDMsg() throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(ResourceUtils.getFile("classpath:book.txt")));
         String msgLine;
         String nowLine = ZHConfiguration.get("nowLine", "0");
@@ -56,10 +65,9 @@ public class SendDDMessage {
 
             ZHConfiguration.set("nowLine", "" + line);
             if(line > nowLineInt + 2){
-                return "模拟中断操作！";
+                return ResultBody.success("模拟中断操作！");
             }
         }
-
-        return sendMsg("消息已经发送完成！");
+        return ResultBody.success(sendMsg("消息已经发送完成！"));
     }
 }
