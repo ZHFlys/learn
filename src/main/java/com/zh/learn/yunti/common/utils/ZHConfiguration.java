@@ -21,8 +21,12 @@ public class ZHConfiguration {
     private static File BASEFILE;
     static {
         try {
+            File file = new File("src/main/resources/config.ini");
+            if(!file.exists()){
+                file.createNewFile();
+            }
             BASEFILE = ResourceUtils.getFile("classpath:config.ini");
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
